@@ -1,10 +1,13 @@
-from xml.etree.ElementTree import tostring
-
-from requests import Response
 #https://github.com/googleapis/google-api-python-client/blob/main/docs/README.md
-
-import keys
+from xml.etree.ElementTree import tostring
+from requests import Response
 from googleapiclient.discovery import build
+
+#adding outer folder to directory
+import sys
+sys.path.insert(0, './')
+import keys
+
 
 youtube = build("youtube", "v3", developerKey=keys.api_key)
 request = youtube.channels().list(
