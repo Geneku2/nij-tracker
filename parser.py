@@ -1,8 +1,11 @@
+from unicodedata import name
 from bs4 import BeautifulSoup
 from requests_html import HTMLSession
 
 
 def get_members(branch = "en"):
+
+    #Depending on what branch is requested, url is set to said branch
     url = "https://www.nijisanji.jp"
     if (branch == "en"):
         url = "https://www.nijisanji.jp/en/members?order=debut_at"
@@ -11,24 +14,50 @@ def get_members(branch = "en"):
     else:
         raise Exception("Given Branch \"" + branch + "\" Is Not Supported")
 
+    #HTML is pulled from respective website
     this_session = HTMLSession()
     request = this_session.get(url)
     request.html.render()
-    soup = BeautifulSoup(request.html.raw_html, "html.parser")
-    div_containers = soup.findAll("div", attrs={"class":"bt1fbu-0 fagwEa"})
 
+    #HTML is parsed for images with specific tags
+    soup = BeautifulSoup(request.html.raw_html, "html.parser")
+    div_containers = soup.findAll("img", attrs={"class":"u3qrsl-0 bTAYwC"})     #tags are prone to breaking, may need updates
+
+    #string processing to tidy up list of names
     names = []
     for item in div_containers:
-        names.append(item.text.lower())
+        names.append(str(item["src"]))
 
-    if(branch == "jp"):
-        #gotta do some fancy processing here to make sure letters are good
-        #also note: consider using image instead because images are formatted correctly
-        pass
+    for imageIdx in range(len(names)):
+        for characterIdx in range(len(names[imageIdx])-1, -1, -1):
+            if(names[imageIdx][characterIdx] == '/'):
+                #offset to specifically get the name, may need changes is riku updates website
+                names[imageIdx] = names[imageIdx][characterIdx+15:len(names[imageIdx])-10]
+                break
 
+    #removes extra characters from name
+    #for nameIdx in range(len(names)):
+    #    for characterIdx in range(len(names[nameIdx])):
+    #        if(names[nameIdx][characterIdx] == '_'):
+    #            names[nameIdx] = names[nameIdx][0:characterIdx] + names[nameIdx][characterIdx+1:len(names[nameIdx])]
+    #            break
+
+    #for nameIdx in range(len(names)):
+    #    numUpper = 0
+    #    for characterIdx in range(len(names[nameIdx])):
+    #        if(names[nameIdx][characterIdx].isupper()):
+    #            numUpper+=1
+    #        if numUpper > 1:
+    #            names[nameIdx] = names[nameIdx][0:characterIdx] + "-" + names[nameIdx][characterIdx:len(names[nameIdx])]
+    #            break
+    #    names[nameIdx] = names[nameIdx].lower()
     return names
 
 list = get_members(branch="jp")
+list2 = get_members(branch="en")
 
 for item in list:
+    print(item)
+
+for item in list2:
     print(item)
