@@ -36,7 +36,31 @@ def get_members(branch = "en"):
                 break
 
     #removes extra characters from name
-    #for nameIdx in range(len(names)):
+    for nameIdx in range(len(names)):
+        #if follows FirstLast format
+        if names[nameIdx].isalnum():
+            numUpper = 0
+            for characterIdx in range(len(names[nameIdx])):
+                if(names[nameIdx][characterIdx].isupper()):
+                    numUpper+=1
+                if numUpper > 1:
+                    names[nameIdx] = names[nameIdx][0:characterIdx] + "-" + names[nameIdx][characterIdx:len(names[nameIdx])]
+                    break
+        else:
+            while names[nameIdx].find("_") != -1:
+                names[nameIdx] = names[nameIdx][:names[nameIdx].index("_")] + "-" + names[nameIdx][names[nameIdx].index("_")+1:]
+            while names[nameIdx].find("%20") != -1:
+                names[nameIdx] = names[nameIdx][:names[nameIdx].index("%20")] + "-" + names[nameIdx][names[nameIdx].index("%20")+3:]
+        names[nameIdx] = names[nameIdx].lower()
+
+            #yuuhi = yuhi
+            #Aduchi = Azuchi
+            #Uduki = Uzuki
+            #Shouichi = Shoichi
+            #gundou = gundo
+
+
+
     #    for characterIdx in range(len(names[nameIdx])):
     #        if(names[nameIdx][characterIdx] == '_'):
     #            names[nameIdx] = names[nameIdx][0:characterIdx] + names[nameIdx][characterIdx+1:len(names[nameIdx])]
