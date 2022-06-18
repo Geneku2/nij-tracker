@@ -27,10 +27,38 @@ class liver:
         self.name = snippetRequest["items"][0]["snippet"]["title"]
         self.subcount = statsRequest["items"][0]["statistics"]["subscriberCount"]
         self.last_date = datetime.date.today().strftime("%m/%d/%Y")
-        self.branch = branch_
 
-    def write_to_doc(self, doc, branch = None):
-        pass
+        #only allows for existing branches
+        if(branch_ == "en" or branch_ == "jp"):
+            self.branch = branch_
+        else:
+            self.branch = None
+
+    def fetch_subcount(self):
+        youtube = build("youtube", "v3", developerKey=keys.api_key)
+        statsRequest = youtube.channels().list(part="statistics", id = self.id).execute()
+
+        if ("items" not in statsRequest):
+            raise Exception("The ChannelID " + self.id + " Has Been Suspended, Terminated Or Doesn't Exist")
+
+        self.subcount = statsRequest["items"][0]["statistics"]["subscriberCount"]
+        self.last_date = datetime.date.today().strftime("%m/%d/%Y")
+
+    def write_to_doc(self, branch_ = "unk"):
+        #case if liver has existing valid branch
+        if(self.branch != None):
+            f = open("vt_data_localization/" + self.branch + "_csv.txt", "a", encoding="utf-8")
+            f.write(self.getCSV() + "\n")
+            f.close
+        elif (branch_ == "en" or branch_ == "jp"):
+            self.branch = branch_
+            f = open("vt_data_localization/" + branch_ + "_csv.txt", "a", encoding="utf-8")
+            f.write(self.getCSV() + "\n")
+            f.close
+        else:
+            f = open("vt_data_localization/unk_csv.txt", "a", encoding="utf-8")
+            f.write(self.getCSV() + "\n")
+            f.close
 
     def getCSV(self):
         return self.id + ", " + self.name + ", " + self.last_date + ", " + self.subcount
@@ -39,5 +67,5 @@ class liver:
         self.branch = newBranch
 
 #idk is line below is valid not tested
-p = liver("UCckdfYDGrjojJM28n5SHYrA")
-print(p.getCSV())
+#p = liver("UCckdfYDGrjojJM28n5SHYrA", branch_="Grvesc")
+#p.write_to_doc()

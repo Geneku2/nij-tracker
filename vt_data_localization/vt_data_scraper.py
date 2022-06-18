@@ -137,10 +137,10 @@ def fetch_yt_id(livername):
 
     return channelID
 
-list = get_members(branch="jp")
-for mem in list:
-    print(mem)
+#list = get_members(branch="jp")
+#for mem in list:
+#    print(mem)
 
-list1 = get_members(branch="en")
-for mem in list1:
-    print(mem)
+#list1 = get_members(branch="en")
+#for mem in list1:
+#    print(mem)
