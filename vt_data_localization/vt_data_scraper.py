@@ -1,12 +1,5 @@
 from bs4 import BeautifulSoup
-from datetime import date
 from requests_html import HTMLSession
-from googleapiclient.discovery import build
-
-import sys
-sys.path.insert(0, './')
-import keys
-
 
 def get_members(branch = "en"):
 
@@ -95,8 +88,9 @@ def get_members(branch = "en"):
         elif names[nameIdx] == "jiyu-oh":
             #jiyu oh = oh jiyu
             names[nameIdx] = "oh-jiyu"     
-        elif names[nameIdx] == "nari-yang":
-            #nari yang = yang nari
+        elif names[nameIdx] == "ped-20220616":
+            #nari yang = yang nari || ped-20220616 = nari yang
+            #i don't know why nijisanji has no consistency, mein gott
             names[nameIdx] = "yang-nari"
         elif names[nameIdx] == "hari-ryu":
             #hari ryu = ryu hari
@@ -143,35 +137,10 @@ def fetch_yt_id(livername):
 
     return channelID
 
-def generate_liver_csv(liverid = "UCckdfYDGrjojJM28n5SHYrA"):
-    #defaults vox akuma because rena is thirsting hard for dilfs
+list = get_members(branch="jp")
+for mem in list:
+    print(mem)
 
-    youtube = build("youtube", "v3", developerKey=keys.api_key)
-    snippetRequest = youtube.channels().list(part="snippet", id = liverid)
-    statsRequest = youtube.channels().list(part="statistics", id = liverid)
-
-    #catch if liver doesn't exist or is banned or some shit like that
-
-    username = snippetRequest.execute()["items"][0]["snippet"]["title"]
-    subcount = statsRequest.execute()["items"][0]["statistics"]["subscriberCount"]
-
-    csv = liverid + ", " + username + ", " + date.today().strftime("%d/%m/%Y") + ", " + subcount
-
-    liverinfo = {"csv": csv,
-                "id": liverid,
-                "username": username,
-                "time": date.today().strftime("%m/%d/%Y"),
-                "subscribers": subcount}
-
-    return liverinfo
-
-for item in generate_liver_csv(liverid="UCfki3lMEF6SGBFiFfo9kvUA"):
-    print(generate_liver_csv(liverid="UCfki3lMEF6SGBFiFfo9kvUA")[item])
-
-#list = get_members(branch="jp")
-#for mem in list:
-#    print(fetch_yt_id(mem))
-
-#list = get_members(branch="en")
-#for mem in list:
-#    print(fetch_yt_id(mem))
+list1 = get_members(branch="en")
+for mem in list1:
+    print(mem)
