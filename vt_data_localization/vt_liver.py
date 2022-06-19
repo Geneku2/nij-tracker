@@ -34,6 +34,7 @@ class liver:
         else:
             self.branch = None
 
+    #gets subcount only from youtube API
     def fetch_subcount(self):
         youtube = build("youtube", "v3", developerKey=keys.api_key)
         statsRequest = youtube.channels().list(part="statistics", id = self.id).execute()
@@ -45,20 +46,25 @@ class liver:
         self.last_date = datetime.date.today().strftime("%m/%d/%Y")
 
     def write_to_doc(self, branch_ = "unk"):
+        
         #case if liver has existing valid branch
         if(self.branch != None):
             f = open("vt_data_localization/" + self.branch + "_csv.txt", "a", encoding="utf-8")
             f.write(self.getCSV() + "\n")
-            f.close
+            f.close()
+
+        #if liver doesn't have a valid branch and argument branch is valid
         elif (branch_ == "en" or branch_ == "jp"):
             self.branch = branch_
             f = open("vt_data_localization/" + branch_ + "_csv.txt", "a", encoding="utf-8")
             f.write(self.getCSV() + "\n")
-            f.close
+            f.close()
+
+        #otherwise, it is unknown and is treated as such
         else:
             f = open("vt_data_localization/unk_csv.txt", "a", encoding="utf-8")
             f.write(self.getCSV() + "\n")
-            f.close
+            f.close()
 
     def getCSV(self):
         return self.id + ", " + self.name + ", " + self.last_date + ", " + self.subcount

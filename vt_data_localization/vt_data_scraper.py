@@ -1,16 +1,16 @@
 from bs4 import BeautifulSoup
 from requests_html import HTMLSession
 
-def get_members(branch = "en"):
+def get_members(branch_ = "en"):
 
     #Depending on what branch is requested, url is set to said branch
     url = "https://www.nijisanji.jp"
-    if (branch == "en"):
+    if (branch_ == "en"):
         url = "https://www.nijisanji.jp/en/members?order=debut_at"
-    elif (branch == "jp"):
+    elif (branch_ == "jp"):
         url = "https://www.nijisanji.jp/en/members?filter=%E3%81%AB%E3%81%98%E3%81%95%E3%82%93%E3%81%98&order=debut_at"
     else:
-        raise Exception("Given Branch \"" + branch + "\" Is Not Supported")
+        raise Exception("Given Branch \"" + branch_ + "\" Is Not Supported")
 
     #HTML is pulled from respective website
     this_session = HTMLSession()
@@ -137,10 +137,10 @@ def fetch_yt_id(livername):
 
     return channelID
 
-#list = get_members(branch="jp")
+#list = get_members(branch_="jp")
 #for mem in list:
 #    print(mem)
 
-#list1 = get_members(branch="en")
+#list1 = get_members(branch_="en")
 #for mem in list1:
 #    print(mem)
