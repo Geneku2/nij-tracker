@@ -1,3 +1,7 @@
+# THIS FILE WAS WRITTEN AS A TEST FOR THE YOUTUBE API AND IS UNUSED IN THE GREATER SCOPE OF THE PROJECT
+# KEEPING THIS FILE HERE IS FOR DOCUMENTATION AND REFERENCE PURPOSES ONLY
+
+
 #https://github.com/googleapis/google-api-python-client/blob/main/docs/README.md
 from xml.etree.ElementTree import tostring
 from requests import Response
